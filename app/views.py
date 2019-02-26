@@ -64,9 +64,13 @@ def login():
 @app.route("/secure-page")
 @login_required
 def secure_page():
-    if current_user.is_authenticated:
-        return render_template("secure_page.html")
-    return redirect(url_for('login'))
+    return render_template("secure_page.html")
+
+@app.route("/logout")
+def logout():
+    logout_user()
+    flash('You are now logged out.','danger')
+    return redirect(url_for('home'))
 
 
 # user_loader callback. This callback is used to reload the user object from
