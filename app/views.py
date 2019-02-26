@@ -31,6 +31,8 @@ def about():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('secure_page'))
     form = LoginForm()
     if ((request.method == "POST") and (form.validate_on_submit())):
         # change this to actually validate the entire form submission
@@ -57,6 +59,14 @@ def login():
             else:
                 flash('User not found.')
     return render_template("login.html", form=form)
+
+
+@app.route("/secure-page")
+@login_required
+def secure_page():
+    if current_user.is_authenticated:
+        return render_template("secure_page.html")
+    return redirect(url_for('login'))
 
 
 # user_loader callback. This callback is used to reload the user object from
